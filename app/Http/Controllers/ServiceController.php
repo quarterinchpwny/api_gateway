@@ -20,9 +20,9 @@ class ServiceController extends Controller
     {
         try {
             $services = Service::all();
-            return $this->successResponse(Response::HTTP_OK, 'Services retrieved successfully', $services);
+            return $this->successResponse($services, 'Services retrieved successfully', 200);
         } catch (Exception $e) {
-            return $this->errorResponse(500, 'Error retrieving services', $e);
+            return $this->errorResponse($e, 'Error retrieving services', 500);
         }
     }
 
@@ -34,9 +34,9 @@ class ServiceController extends Controller
         try {
             $validated = $request->validated();
             $service = Service::create($validated);
-            return $this->successResponse(Response::HTTP_CREATED, 'Service created successfully', $service);
+            return $this->successResponse($service, 'Service created successfully', 201);
         } catch (Exception $e) {
-            return $this->errorResponse(500, 'Error creating service', $e);
+            return $this->errorResponse($e, 'Error creating service', 500);
         }
     }
 

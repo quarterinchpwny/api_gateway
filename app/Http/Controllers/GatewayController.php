@@ -13,36 +13,41 @@ class GatewayController extends Controller
     public function forwardRequest(Request $request, $service, $endpoint)
     {
         try {
+
             // Retrieve service URL dynamically based on the service name
             $service = Service::where('name', $service)->first();
 
             if (!$service) {
-                return $this->errorResponse(404, 'Service not found');
+                return $this->errorResponse(new Exception('Service not found'), null, 404);
             }
 
-            $url = $service->service_ip . '/api/' . $endpoint;
+            $url = "{$service->service_ip}/api/{$endpoint}";
             $method = $request->method();
 
             $bearerToken = $request->bearerToken();
 
-            if (!isset($bearerToken) || !Auth::guard('sanctum')->check()) {
-                return $this->errorResponse(401, 'Unauthenticated');
-            }
+            // if (!isset($bearerToken) || !Auth::guard('sanctum')->check()) {
+            //     return $this->errorResponse(new Exception('Unauthenticated'), null, 401);
+            // }
 
             $formData = $request->request->all();
+            $apiKey = env('API_KEY');
+
 
             $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . $bearerToken,
+                'Authorization' => "Bearer $bearerToken",
                 'Accept' => 'application/json',
+                'api_key' => $apiKey
             ])->send($method, $url, [
                 'query' => $request->query(),
                 'json' => $formData,
 
             ]);
 
-            return $this->successResponse(200, 'Request forwarded successfully', json_decode($response->body(), true));
+            return $this->successResponse(json_decode($response->body(), true), 'Request forwarded successfully', 200);
         } catch (Exception $e) {
-            return $this->errorResponse(500, 'Internal server error', $e);
+
+            return $this->errorResponse($e, 'Internal server error', 500);
         }
     }
 }

@@ -28,12 +28,13 @@ Route::prefix('auth')->group(function () {
 });
 
 
+Route::match(['get', 'post', 'put', 'delete'], '/{service}/{endpoint}', [GatewayController::class, 'forwardRequest'])
+    ->where('endpoint', '.*');
+Route::resources([
+    'service' => ServiceController::class,
+]);
+
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthenticationController::class, 'logout'])->name('logout');
-    Route::match(['get', 'post', 'put', 'delete'], '/{service}/{endpoint}', [GatewayController::class, 'forwardRequest'])
-        ->where('endpoint', '.*');
-
-    Route::resources([
-        'service' => ServiceController::class,
-    ]);
 });
