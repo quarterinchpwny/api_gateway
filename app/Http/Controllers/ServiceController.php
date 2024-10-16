@@ -61,7 +61,7 @@ class ServiceController extends Controller
             $validated = $request->validated();
             $service = Service::findOrFail($id);
             $service->update($validated);
-            return $this->successResponse(Response::HTTP_OK, 'Service updated successfully', $service);
+            return $this->successResponse($service, 'Service updated successfully',  Response::HTTP_OK);
         } catch (Exception $e) {
             return $this->errorResponse(500, 'Error updating service', $e);
         }

@@ -47,7 +47,7 @@ class GatewayController extends Controller
             return $this->successResponse(json_decode($response->body(), true), 'Request forwarded successfully', 200);
         } catch (Exception $e) {
 
-            return $this->errorResponse($e, 'Internal server error', 500);
+            return $this->errorResponse($e, 'Ooops something went wrong', 400);
         }
     }
 }

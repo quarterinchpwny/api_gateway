@@ -20,10 +20,16 @@ trait HttpResponses
     public function successResponse($data, $message = null, $code = Response::HTTP_OK)
     {
         return response()->json([
-            'code' => $code,
-            'message' => $message,
-            'data' => $data,
-        ], $code);
+
+            'code' => 200,
+            'message' => 'Fetched successfully',
+            'data' => [
+                'code' => $code,
+                'message' => $message,
+                'data' => $data,
+            ],
+
+        ], 200);
     }
 
     /**
@@ -35,7 +41,7 @@ trait HttpResponses
     public function errorResponse($e, $message = 'Something went wrong', $code = Response::HTTP_BAD_REQUEST)
     {
         // Log the full error details for developers
-        Log::error('Error occurred', [
+        Log::error("Error occurred ($message)", [
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString(),
             'code' => $code,
@@ -43,8 +49,8 @@ trait HttpResponses
 
         // Return a generic error message to the user
         return response()->json([
-            'code' => $code,
-            'message' => $message,
-        ], $code);
+            'code' => 400,
+            'message' => 'Oops something went wrong',
+        ], 400);
     }
 }
