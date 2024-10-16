@@ -22,12 +22,8 @@ trait HttpResponses
         return response()->json([
 
             'code' => 200,
-            'message' => 'Fetched successfully',
-            'data' => [
-                'code' => $code,
-                'message' => $message,
-                'data' => $data,
-            ],
+            'message' => 'Request successful',
+            'data' => $data,
 
         ], 200);
     }

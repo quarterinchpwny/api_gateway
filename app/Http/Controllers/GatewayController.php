@@ -26,9 +26,9 @@ class GatewayController extends Controller
 
             $bearerToken = $request->bearerToken();
 
-            // if (!isset($bearerToken) || !Auth::guard('sanctum')->check()) {
-            //     return $this->errorResponse(new Exception('Unauthenticated'), null, 401);
-            // }
+            if (!isset($bearerToken) || !Auth::guard('sanctum')->check()) {
+                return $this->errorResponse(new Exception('Unauthenticated'), null, 401);
+            }
 
             $formData = $request->request->all();
             $apiKey = env('API_KEY');
