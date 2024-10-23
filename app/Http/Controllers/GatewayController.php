@@ -37,7 +37,7 @@ class GatewayController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => "Bearer $bearerToken",
                 'Accept' => 'application/json',
-                'api_key' => $apiKey
+                'API-KEY' => $apiKey
             ])->send($method, $url, [
                 'query' => $request->query(),
                 'json' => $formData,
